@@ -72,37 +72,37 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", async (req, res) => {
   const secret = process.env.ELEVENLABS_CONVAI_WEBHOOK_SECRET;
-  console.log("magan", req.headers);
-  //   const headers = req.headers["ElevenLabs-Signature"].split(",");
-  //   const timestamp = headers.find((e) => e.startsWith("t=")).substring(2);
-  //   const signature = headers.find((e) => e.startsWith("v0="));
-  //   // Validate timestamp
-  //   const reqTimestamp = timestamp * 1000;
-  //   const tolerance = Date.now() - 30 * 60 * 1000;
-  //   if (reqTimestamp < tolerance) {
-  //     res.status(403).send("Request expired");
-  //     return;
-  //   } else {
-  //     // Validate hash
-  //     const message = `${timestamp}.${req.body}`;
-  //     const digest =
-  //       "v0=" + crypto.createHmac("sha256", secret).update(message).digest("hex");
-  //     if (signature !== digest) {
-  //       res.status(401).send("Request unauthorized");
-  //       return;
-  //     }
-  //   }
+  console.log("magan", req.headers["elevenlabs-signature"]);
+  const headers = req.headers["elevenlabs-signature"].split(",");
+  const timestamp = headers.find((e) => e.startsWith("t=")).substring(2);
+  const signature = headers.find((e) => e.startsWith("v0="));
+  // Validate timestamp
+  const reqTimestamp = timestamp * 1000;
+  const tolerance = Date.now() - 30 * 60 * 1000;
+  if (reqTimestamp < tolerance) {
+    res.status(403).send("Request expired");
+    return;
+  } else {
+    // Validate hash
+    const message = `${timestamp}.${req.body}`;
+    const digest =
+      "v0=" + crypto.createHmac("sha256", secret).update(message).digest("hex");
+    if (signature !== digest) {
+      res.status(401).send("Request unauthorized");
+      return;
+    }
+  }
 
-  //   let body = "";
-  //   // Handle chunked/streaming requests
-  //   req.on("data", (chunk) => {
-  //     body += chunk;
-  //   });
+  let body = "";
+  // Handle chunked/streaming requests
+  req.on("data", (chunk) => {
+    body += chunk;
+  });
 
-  //   req.on("end", () => {
-  //     const requestBody = JSON.parse(body);
-  //     console.log("Received webhook request:", requestBody);
-  //   });
+  req.on("end", () => {
+    const requestBody = JSON.parse(body);
+    console.log("Received webhook request:", requestBody);
+  });
 });
 
 app.listen(3000, () => {
