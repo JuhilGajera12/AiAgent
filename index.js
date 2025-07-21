@@ -72,7 +72,7 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", async (req, res) => {
   const secret = process.env.ELEVENLABS_CONVAI_WEBHOOK_SECRET;
-  console.log("magan", req.headers["ElevenLabs-Signature"]);
+  console.log("magan", req.headers);
   //   const headers = req.headers["ElevenLabs-Signature"].split(",");
   //   const timestamp = headers.find((e) => e.startsWith("t=")).substring(2);
   //   const signature = headers.find((e) => e.startsWith("v0="));
