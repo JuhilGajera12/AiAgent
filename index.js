@@ -5,6 +5,8 @@ dotenv.config();
 
 const app = express();
 
+app.use("/webhook", express.raw({ type: "*/*" }));
+
 app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
@@ -72,7 +74,9 @@ app.get("/", (req, res) => {
 // };
 
 app.post("/webhook", async (req, res) => {
-  console.log("-----> request.bady <-----", req.body);
+  const rawString = req.body.toString(); // convert buffer to string
+  const jsonData = JSON.parse(rawString);
+  console.log("-----> request.bady <-----", jsonData);
   const secret = process.env.ELEVENLABS_CONVAI_WEBHOOK_SECRET;
   console.log("magan", req.headers["elevenlabs-signature"]);
   const headers = req.headers["elevenlabs-signature"].split(",");
