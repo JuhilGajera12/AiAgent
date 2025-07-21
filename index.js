@@ -72,6 +72,7 @@ app.get("/", (req, res) => {
 // };
 
 app.post("/webhook", async (req, res) => {
+  console.log("-----> request.bady <-----", req.body);
   const secret = process.env.ELEVENLABS_CONVAI_WEBHOOK_SECRET;
   console.log("magan", req.headers["elevenlabs-signature"]);
   const headers = req.headers["elevenlabs-signature"].split(",");
@@ -105,6 +106,7 @@ app.post("/webhook", async (req, res) => {
     console.log("Received webhook request:", requestBody);
   });
 });
+console.log("🚀 ~ app.post ~ co:", co);
 
 app.listen(3000, () => {
   console.log("server is running on port 3000");
