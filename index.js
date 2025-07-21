@@ -106,7 +106,6 @@ app.post("/webhook", async (req, res) => {
     console.log("Received webhook request:", requestBody);
   });
 });
-console.log("🚀 ~ app.post ~ co:", co);
 
 app.listen(3000, () => {
   console.log("server is running on port 3000");
